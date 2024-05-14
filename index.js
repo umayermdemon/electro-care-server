@@ -32,7 +32,14 @@ async function run() {
       res.send(result);
     });
     
+    app.get("/services/:id", async (req, res) => {
+      const id=req.params.id
+      const query = { _id: new ObjectId(id) };
+      const result= await serviceCollection.findOne(query);
+      res.send(result)
+    });
 
+    
     app.post("/services", async (req, res) => {
       const newService = req.body;
       const result = await serviceCollection.insertOne(newService);
