@@ -26,7 +26,9 @@ async function run() {
     await client.connect();
 
     const serviceCollection = client.db("serviceDb").collection("service");
+    const bookedCollection = client.db("bookedDb").collection("booked");
 
+    //service related api
     app.get("/services", async (req, res) => {
       const result = await serviceCollection.find().toArray();
       res.send(result);
@@ -39,10 +41,23 @@ async function run() {
       res.send(result)
     });
 
-    
+
     app.post("/services", async (req, res) => {
       const newService = req.body;
       const result = await serviceCollection.insertOne(newService);
+      res.send(result);
+    });
+
+    //booked related api
+
+    app.get('/booked', async(req,res)=>{
+      const result= await bookedCollection.find().toArray()
+      res.send(result)
+    })
+
+    app.post("/booked", async (req, res) => {
+      const newBooked = req.body;
+      const result = await bookedCollection.insertOne(newBooked);
       res.send(result);
     });
 
