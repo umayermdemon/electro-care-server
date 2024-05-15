@@ -30,22 +30,21 @@ async function run() {
 
     //service related api
     app.get("/services", async (req, res) => {
-      console.log(req.query.email)
-      let query={}
-      if(req.query?.email){
-        query={providerEmail:req.query.email}
+      console.log(req.query.email);
+      let query = {};
+      if (req.query?.email) {
+        query = { providerEmail: req.query.email };
       }
       const result = await serviceCollection.find(query).toArray();
       res.send(result);
     });
-    
-    app.get("/services/:id", async (req, res) => {
-      const id=req.params.id
-      const query = { _id: new ObjectId(id) };
-      const result= await serviceCollection.findOne(query);
-      res.send(result)
-    });
 
+    app.get("/services/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await serviceCollection.findOne(query);
+      res.send(result);
+    });
 
     app.post("/services", async (req, res) => {
       const newService = req.body;
@@ -53,23 +52,47 @@ async function run() {
       res.send(result);
     });
     app.delete("/services/:id", async (req, res) => {
-      const id=req.params.id;
-      const query={_id: new ObjectId(id)}
-      const result= await serviceCollection.deleteOne(query)
-      res.send(result)
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await serviceCollection.deleteOne(query);
+      res.send(result);
+    });
+
+    app.patch("/services/:id", async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) };
+      const service = req.body;
+      const updateService = {
+        $set: {
+          serviceName:service.serviceName,
+          serviceImage:service.serviceImage,
+          price:service.price,
+          serviceArea:service.serviceArea,
+          description:service.description,
+        },
+      };
+      const result = await serviceCollection.updateOne(filter, updateService);
+      res.send(result);
     });
 
     //booked related api
 
-    app.get('/booked', async(req,res)=>{
-      console.log(req.query.email)
-      let query={}
-      if(req.query?.email){
-        query={userEmail: req.query.email}
+    app.get("/booked", async (req, res) => {
+      console.log(req.query.email);
+      let query = {};
+      if (req.query?.email) {
+        query = { userEmail: req.query.email };
       }
-      const result= await bookedCollection.find(query).toArray()
-      res.send(result)
-    })
+      const result = await bookedCollection.find(query).toArray();
+      res.send(result);
+    });
+
+    app.get("/booked/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await bookedCollection.findOne(query);
+      res.send(result);
+    });
 
     app.post("/booked", async (req, res) => {
       const newBooked = req.body;
