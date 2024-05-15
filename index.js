@@ -30,7 +30,12 @@ async function run() {
 
     //service related api
     app.get("/services", async (req, res) => {
-      const result = await serviceCollection.find().toArray();
+      console.log(req.query.email)
+      let query={}
+      if(req.query?.email){
+        query={providerEmail:req.query.email}
+      }
+      const result = await serviceCollection.find(query).toArray();
       res.send(result);
     });
     
@@ -47,11 +52,22 @@ async function run() {
       const result = await serviceCollection.insertOne(newService);
       res.send(result);
     });
+    app.delete("/services/:id", async (req, res) => {
+      const id=req.params.id;
+      const query={_id: new ObjectId(id)}
+      const result= await serviceCollection.deleteOne(query)
+      res.send(result)
+    });
 
     //booked related api
 
     app.get('/booked', async(req,res)=>{
-      const result= await bookedCollection.find().toArray()
+      console.log(req.query.email)
+      let query={}
+      if(req.query?.email){
+        query={userEmail: req.query.email}
+      }
+      const result= await bookedCollection.find(query).toArray()
       res.send(result)
     })
 
