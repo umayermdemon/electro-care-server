@@ -23,14 +23,13 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
+    // await client.connect();
 
     const serviceCollection = client.db("serviceDb").collection("service");
     const bookedCollection = client.db("bookedDb").collection("booked");
 
     //service related api
     app.get("/services", async (req, res) => {
-      console.log(req.query.email);
       let query = {};
       if (req.query?.email) {
         query = { providerEmail: req.query.email };
@@ -78,7 +77,6 @@ async function run() {
     //booked related api
 
     app.get("/booked", async (req, res) => {
-      console.log(req.query.email);
       let query = {};
       if (req.query?.email) {
         query = { userEmail: req.query.email };
@@ -101,7 +99,7 @@ async function run() {
     });
 
     // Send a ping to confirm a successful connection
-    await client.db("admin").command({ ping: 1 });
+    // await client.db("admin").command({ ping: 1 });
     console.log(
       "Pinged your deployment. You successfully connected to MongoDB!"
     );
